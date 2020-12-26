@@ -8,12 +8,20 @@ namespace ChatApp
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-            app.UseMvcWithDefaultRoute();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(name:"areas", pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(name:"default", pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
