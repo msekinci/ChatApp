@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatApp</title>
+    <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="stylesheet" href="~/css/site.css">
 </head>
+
 <body>
     <div class="navbar">
-
+        
     </div>
     <div class="main">
-        <div class="side-menu">
-            <a class="room-button" href="#">Room</a>
-            <a class="room-button" href="#"><strong>+</strong></a>
-        </div>
+        <!-- SideBar -->
+        <vc:room></vc:room>
         <div class="chat">
             @RenderBody()
         </div>
     </div>
+    <div id="create-room-modal" class="modal">
+        <form asp-action="CreateRoom" method="POST" class="modal-body">
+            <button type="button" onclick="closeModal()" class="close">X</button>
+            <header>Create Room</header>
+            <div>
+                <input name="name">
+            </div>
+            <footer><button>Create</button></footer>
+        </form>
+    </div>
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", false)
 </body>
 </html>

@@ -2,6 +2,12 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
 body {
     margin: 0;
     height: 100vh;
@@ -26,6 +32,7 @@ body {
 .side-menu {
     background-color: #443554;
     min-width: 100px;
+    max-width: 100px;
     z-index: 50;
     box-shadow: 1px 0 2px 0 #333;
     display: flex;
@@ -34,12 +41,14 @@ body {
 
 .room-button {
     color: white;
+    text-align: center;
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0.75rem 1rem 0;
     height: 68px;
+    font-size: 15px;
     border-radius: 10px;
     box-shadow: 0 1px 3px 1px #333;
     background-color: #57446b;
@@ -131,8 +140,55 @@ body {
     text-align: center;
 }
 
-html {
-    height: 100%;
+.modal{
+    display: none;
+    position: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    background-color: rgba(0.2, 0.2, 0.2, 0.8);
+}
+
+.modal.active{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-body{
+    position: relative;
+    border-radius: 50px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: #5c4773;
+    padding: 1rem;
+}
+
+.modal-body > .close{
+    position: absolute;
+    top: 5px;
+    right: 25px;
+    border-radius: 50px;
+    margin-top: 0;
+}
+
+.modal-body > header{
+    color: #fff;
+    text-align: center;
+    font-size: 24px;
+}
+
+.modal-body > div > input{
     width: 100%;
-    overflow: hidden;
+}
+
+.modal-body > footer{
+    text-align: center;
+}
+
+.modal-body > * {
+    margin-top: 0.5rem;
 }
