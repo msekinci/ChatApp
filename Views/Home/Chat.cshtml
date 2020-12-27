@@ -9,7 +9,10 @@
         </div>
     }
 </div>
-<div class="chat-input">
-    <input type="text">
-    <button>Send</button>
+<div>
+    <form class="chat-input" method="POST" asp-action="SendMessage">
+        <input type="hidden" name="chatId" value="@Model.Id">
+        <input name="text" type="text">
+        <button type="submit">Send</button>
+    </form>
 </div>

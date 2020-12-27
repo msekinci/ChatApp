@@ -23,19 +23,31 @@ namespace ChatApp
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<ChatDbContext>(options => options.UseSqlServer(connectionString));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ChatDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<User, IdentityRole>(options => {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 5;
+            })
+            .AddEntityFrameworkStores<ChatDbContext>()
+            .AddDefaultTokenProviders();
+            services.AddSignalR();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseRouting();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(name: "areas", pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+                //endpoints.MapHub<SomeHub>("/path");
+            });            
         }
     }
 }

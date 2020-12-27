@@ -11,11 +11,15 @@
 
 <body>
     <div class="navbar">
-        
+
     </div>
     <div class="main">
         <!-- SideBar -->
-        <vc:room></vc:room>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <vc:room></vc:room>
+        }
         <div class="chat">
             @RenderBody()
         </div>
@@ -33,4 +37,5 @@
     <script src="~/js/site.js"></script>
     @RenderSection("Scripts", false)
 </body>
+
 </html>
