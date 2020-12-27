@@ -28,6 +28,41 @@ namespace ChatApp.Controllers
             return View(chats);
         }
 
+        public IActionResult Find()
+        {
+            var users = _ctx.Users.Where(x => x.Id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            .ToList();
+            return View(users);
+        }
+
+        public IActionResult Private()
+        {
+            var chats = _ctx.Chats
+            .Include(x => x.Users)
+            .ThenInclude(x => x.User)
+            .Where(x => x.Type == ChatType.Private && x.Users
+                                                        .Any(y => y.UserId != User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            .ToList();
+            return View(chats);
+        }
+
+        public async Task<IActionResult> CreatePrivateRoom(string userId)
+        {
+            var chat = new Chat
+            {
+                Type = ChatType.Private,
+            };
+
+            chat.Users.Add(new ChatUser
+            {
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value
+            });
+
+            _ctx.Chats.Add(chat);
+            await _ctx.SaveChangesAsync();
+            return RedirectToAction("Chat", new { id = chat.Id });
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateRoom(string name)
         {
@@ -59,7 +94,7 @@ namespace ChatApp.Controllers
             };
             _ctx.ChatUsers.Add(chatUser);
             await _ctx.SaveChangesAsync();
-            return RedirectToAction("Chat", "Home", new {id = id});
+            return RedirectToAction("Chat", "Home", new { id = id });
         }
 
         [HttpGet("{id}")]
@@ -74,12 +109,12 @@ namespace ChatApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendMessage(int chatId, string text)
+        public async Task<IActionResult> SendMessage(int chatId, string message)
         {
             var Message = new Message
             {
                 ChatId = chatId,
-                Text = text,
+                Text = message,
                 Name = User.Identity.Name,
                 Timestamp = DateTime.Now
             };

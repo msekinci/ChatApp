@@ -1,0 +1,15 @@
+@using System.Security.Claims
+@model IEnumerable<Chat>
+
+@{
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+}
+
+<div class="chat-body">
+    @foreach (var room in Model)
+    {
+        <a class="room-button" asp-action="Chat" asp-route-id="@room.Id">
+            @room.Users.FirstOrDefault(x => x.UserId != userId).User.UserName
+        </a>
+    }
+</div>

@@ -1,4 +1,5 @@
 using ChatApp.Database;
+using ChatApp.Hubs;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,7 +21,8 @@ namespace ChatApp
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = _configuration.GetConnectionString("Default");
-            services.AddControllersWithViews();
+            
+            services.AddControllersWithViews().AddNewtonsoftJson(opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
             services.AddRazorPages();
             services.AddDbContext<ChatDbContext>(options => options.UseSqlServer(connectionString));
             services.AddIdentity<User, IdentityRole>(options => {
@@ -46,7 +48,7 @@ namespace ChatApp
             {
                 endpoints.MapControllerRoute(name: "areas", pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-                //endpoints.MapHub<SomeHub>("/path");
+                endpoints.MapHub<ChatHub>("/chatHub");
             });            
         }
     }
